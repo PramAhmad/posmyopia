@@ -1,0 +1,1 @@
+<button {{ $attributes->merge(['class' => 'btn btn-primary']) }}><i class="ti ti-device-floppy"></i> Save</button>
