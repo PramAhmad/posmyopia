@@ -1,0 +1,6 @@
+.table-responsive {
+    overflow-y: hidden !important;
+}
+.dataTables_info {
+    margin-bottom: 1.5rem;
+}

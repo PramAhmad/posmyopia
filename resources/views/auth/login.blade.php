@@ -70,7 +70,7 @@
                                     </div>
                                     <x-inputs.form action="{{ route('login') }}" method="POST">
                                         <div class="mb-3">
-                                            <x-inputs.input type="email" name="email" id="email" label="Email" required/>
+                                            <x-inputs.input type="email" name="email" id="email" label="Email" value="{{ old('email') }}" required/>
                                         </div>
                                         <div class="mb-4">
                                             <x-inputs.input type="password" name="password" id="password" label="Password" required/>
