@@ -79,7 +79,7 @@
                                             <div class="form-check">
                                                 <input class="form-check-input primary" name="remember" type="checkbox" value="" id="flexCheckChecked">
                                                 <label class="form-check-label text-dark" for="flexCheckChecked">
-                                                    Remeber this Device
+                                                    Remember this Device
                                                 </label>
                                             </div>
                                             <a class="text-primary fw-medium" href="#">Forgot Password ?</a>

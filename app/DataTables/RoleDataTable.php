@@ -23,7 +23,12 @@ class RoleDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'role.action')
+            ->addColumn('action', function($query) {
+                return view('datatable-actions.role', compact('query'));
+            })
+            ->editColumn('name', function($query){
+                return ucwords($query->name);
+            })
             ->setRowId('id');
     }
 
@@ -45,7 +50,7 @@ class RoleDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(1)
+                    ->orderBy(0)
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -63,15 +68,13 @@ class RoleDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::make('id'),
+            Column::make('name'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
                   ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+                  ->addClass('text-center')
         ];
     }
 

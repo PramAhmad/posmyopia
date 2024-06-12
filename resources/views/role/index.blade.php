@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table border table-striped table-bordered text-nowrap role-datatable">
+            {{-- <table class="table border table-striped table-bordered text-nowrap role-datatable">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -40,7 +40,8 @@
                     </tr>
                 </thead>
                 <tbody></tbody>
-            </table>
+            </table> --}}
+            {!! $dataTable->table(['class' => 'table border table-striped table-bordered text-nowrap role-datatable w-100']) !!}
         </div>
     </x-cards.card>
 
@@ -53,15 +54,16 @@
         <script src="{{ asset('templates/mdrnz/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
         <script>
             $(function(){
-                $('.role-datatable').DataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "responsive": true,
-                    "language": {
-                        "processing": `<div class="shadow p-3"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Processing...</div>`,
-                    },
-                })
+                // $('.role-datatable').DataTable({
+                //     "processing": true,
+                //     "serverSide": true,
+                //     "responsive": true,
+                //     "language": {
+                //         "processing": `<div class="shadow p-3"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Processing...</div>`,
+                //     },
+                // })
             })
         </script>
+        {!! $dataTable->scripts() !!}
     @endpush
 </x-layouts.app>
