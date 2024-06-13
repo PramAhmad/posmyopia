@@ -23,6 +23,7 @@ class RoleDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->addColumn('action', function($query) {
                 return view('datatable-actions.role', compact('query'));
             })
@@ -50,7 +51,7 @@ class RoleDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(0)
+                    ->orderBy(1, 'asc')
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -59,6 +60,12 @@ class RoleDataTable extends DataTable
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
+                    ])
+                    ->parameters([
+                        'language' => [
+                            // 'url' => url('js/dataTables/language.json')
+                            'processing' => '<div class="shadow p-3"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Processing...</div>'
+                        ]
                     ]);
     }
 
@@ -68,7 +75,19 @@ class RoleDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
+            [
+                'defaultContent' => '',
+                'data'           => 'DT_RowIndex',
+                'name'           => 'DT_RowIndex',
+                'title'          => '',
+                'render'         => null,
+                'orderable'      => false,
+                'searchable'     => false,
+                'exportable'     => false,
+                'printable'      => true,
+                'footer'         => '',
+                'width' => '5%'
+            ],
             Column::make('name'),
             Column::computed('action')
                   ->exportable(false)

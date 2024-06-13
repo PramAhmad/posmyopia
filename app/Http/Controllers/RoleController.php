@@ -11,4 +11,9 @@ class RoleController extends Controller
     {
         return $datatable->render('role.index');
     }
+
+    public function destroy($id)
+    {
+        dd($id);
+    }
 }

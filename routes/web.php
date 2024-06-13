@@ -15,7 +15,7 @@ Route::middleware('auth')->group(function () {
         Route::name('role.')->group(function () {
             Route::controller(RoleController::class)->group(function(){
                 Route::get('/', 'index')->name('index');
-                Route::delete('/delete', 'destroy')->name('delete');
+                Route::delete('/delete/{id}', 'destroy')->name('delete');
             });
         });
     });

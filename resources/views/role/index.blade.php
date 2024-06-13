@@ -52,6 +52,7 @@
     @endpush
     @push('script')
         <script src="{{ asset('templates/mdrnz/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+        {!! $dataTable->scripts() !!}
         <script>
             $(function(){
                 // $('.role-datatable').DataTable({
@@ -62,8 +63,10 @@
                 //         "processing": `<div class="shadow p-3"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Processing...</div>`,
                 //     },
                 // })
+                $('.search').on('keyup keydown change', function(){
+                    window.LaravelDataTables["role-table"].search( this.value ).draw();
+                })
             })
         </script>
-        {!! $dataTable->scripts() !!}
     @endpush
 </x-layouts.app>

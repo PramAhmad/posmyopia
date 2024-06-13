@@ -309,5 +309,13 @@
         <script src="{{ asset('templates/mdrnz/js/sidebarmenu.js') }}"></script>
         <script src="{{ asset('templates/mdrnz/js/custom.js') }}"></script>
         @stack('script')
+        <script>
+            $(function(){
+                $('table.dataTable tbody').on('click', 'tr td .btn-delete', function(){
+                    const t = $(this)
+                    const form = t.closest('td').find('form.form-delete').submit()
+                })
+            })
+        </script>
     </body>
 </html>
