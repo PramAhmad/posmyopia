@@ -15,7 +15,10 @@ Route::middleware('auth')->group(function () {
         Route::name('role.')->group(function () {
             Route::controller(RoleController::class)->group(function(){
                 Route::get('/', 'index')->name('index');
-                Route::delete('/delete/{id}', 'destroy')->name('delete');
+                Route::post('/', 'create')->name('index');
+                Route::post('/{id}/edit', 'edit')->name('edit');
+                Route::put('/{id}/edit', 'update')->name('update');
+                Route::delete('/{id}/delete', 'destroy')->name('delete');
             });
         });
     });

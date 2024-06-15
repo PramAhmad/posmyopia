@@ -11,6 +11,8 @@
         <meta name="description" content="Mordenize" />
         <meta name="author" content="" />
         <meta name="keywords" content="Mordenize" />
+        <meta name="url" content="{{ url('/') }}" />
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!--  Favicon -->
         <link rel="shortcut icon" type="image/png" href="{{ asset('templates/mdrnz/images/logos/favicon.ico') }}" />
@@ -308,12 +310,36 @@
         {{-- <script src="../../dist/js/app-style-switcher.js"></script> --}}
         <script src="{{ asset('templates/mdrnz/js/sidebarmenu.js') }}"></script>
         <script src="{{ asset('templates/mdrnz/js/custom.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @stack('script')
         <script>
             $(function(){
                 $('table.dataTable tbody').on('click', 'tr td .btn-delete', function(){
                     const t = $(this)
-                    const form = t.closest('td').find('form.form-delete').submit()
+                    const form = t.closest('td').find('form.form-delete')
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Swal.fire({
+                            //     title: "Deleted!",
+                            //     text: "Your file has been deleted.",
+                            //     icon: "success"
+                            // });
+
+                            dtTable.ajax.reload()
+                        }
+                    });
+                })
+                
+                $('.search-datatable').on('keyup keydown change', function(){
+                    dtTable.search( this.value ).draw();
                 })
             })
         </script>

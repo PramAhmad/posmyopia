@@ -27,9 +27,6 @@ class RoleDataTable extends DataTable
             ->addColumn('action', function($query) {
                 return view('datatable-actions.role', compact('query'));
             })
-            ->editColumn('name', function($query){
-                return ucwords($query->name);
-            })
             ->setRowId('id');
     }
 
