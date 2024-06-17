@@ -2,9 +2,8 @@
 
 namespace App\DataTables;
 
-use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Spatie\Permission\Models\Role as ModelsRole;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -13,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class RoleDataTable extends DataTable
+class UserDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -24,16 +23,20 @@ class RoleDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('action', function($query) {
-                return view('datatable-actions.role', compact('query'));
+            ->addColumn('role', function($query) {
+                return '<div class="text-center"><span class="badge bg-success">' . $query->getRoleNames()[0] . '</span></div>';
             })
-            ->setRowId('id');
+            ->addColumn('action', function($query) {
+                return view('datatable-actions.user', compact('query'));
+            })
+            ->setRowId('id')
+            ->rawColumns(['role']);
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(ModelsRole $model): QueryBuilder
+    public function query(User $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -44,11 +47,11 @@ class RoleDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('role-table')
+                    ->setTableId('user-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(1, 'asc')
+                    ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -83,14 +86,16 @@ class RoleDataTable extends DataTable
                 'printable'      => true,
                 'footer'         => '',
                 'width' => '5%',
-                'class' => 'text-center'
+                'class' => 'text-center',
             ],
             Column::make('name'),
+            Column::make('email'),
+            Column::computed('role'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
                   ->width(60)
-                  ->addClass('text-center')
+                  ->addClass('text-center'),
         ];
     }
 
@@ -99,6 +104,6 @@ class RoleDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Role_' . date('YmdHis');
+        return 'User_' . date('YmdHis');
     }
 }

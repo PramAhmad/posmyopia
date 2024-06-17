@@ -306,42 +306,24 @@
         <script src="{{ asset('templates/mdrnz/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
         <!--  core files -->
         <script src="{{ asset('templates/mdrnz/js/app.min.js') }}"></script>
-        <script src="{{ asset('templates/mdrnz/js/app.init.js') }}"></script>
+        <script src="{{ asset('templates/mdrnz/js/app.init.js') }}" type="module"></script>
         {{-- <script src="../../dist/js/app-style-switcher.js"></script> --}}
-        <script src="{{ asset('templates/mdrnz/js/sidebarmenu.js') }}"></script>
-        <script src="{{ asset('templates/mdrnz/js/custom.js') }}"></script>
+        <script src="{{ asset('templates/mdrnz/js/sidebarmenu.js') }}" type="module"></script>
+        <script src="{{ asset('templates/mdrnz/js/custom.js') }}" type="module"></script>
+        <script src="{{ asset('templates/mdrnz/js/plugins/toastr-init.js') }}" type="module"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        @stack('script')
-        <script>
+        <script type="module">
             $(function(){
-                $('table.dataTable tbody').on('click', 'tr td .btn-delete', function(){
-                    const t = $(this)
-                    const form = t.closest('td').find('form.form-delete')
-                    Swal.fire({
-                        title: "Are you sure?",
-                        text: "You won't be able to revert this!",
-                        icon: "question",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, delete it!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Swal.fire({
-                            //     title: "Deleted!",
-                            //     text: "Your file has been deleted.",
-                            //     icon: "success"
-                            // });
+                @if ($message = Session::get('success'))
+                    toastr.success("{{ $message }}", "Success");
+                @endif
 
-                            dtTable.ajax.reload()
-                        }
-                    });
-                })
-                
-                $('.search-datatable').on('keyup keydown change', function(){
-                    dtTable.search( this.value ).draw();
-                })
+                @if ($message = Session::get('error'))
+                  toastr.error("{{ $message }}", "Failed");
+                @endif
             })
         </script>
+        @stack('script')
+        @vite('resources/js/page/app.js')
     </body>
 </html>

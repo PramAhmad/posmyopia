@@ -1,14 +1,14 @@
 <x-layouts.app>
-    <x-slot:title>Role</x-slot>
+    <x-slot:title>User</x-slot>
     <div class="card bg-light-info shadow-none position-relative overflow-hidden">
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
                 <div class="col-9">
-                    <h4 class="fw-semibold mb-8">Role</h4>
+                    <h4 class="fw-semibold mb-8">User</h4>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a class="text-muted" href="{{ route('home') }}">Home</a></li>
-                            <li class="breadcrumb-item" aria-current="page">Role</li>
+                            <li class="breadcrumb-item" aria-current="page">User</li>
                         </ol>
                     </nav>
                 </div>
@@ -21,25 +21,42 @@
             <div class="row">
                 <div class="col-md-4 col-xl-2">
                     <div class="position-relative">
-                        <x-inputs.input type="text" class="search-datatable ps-5" id="input-search" placeholder="Search Role" autocomplete="false" />
+                        <x-inputs.input type="text" class="search-datatable ps-5" id="input-search" placeholder="Search User" autocomplete="false" />
                         <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-10 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
-                    <x-buttons.button-primary data-bs-toggle="modal" data-bs-target="#modal-role" class="btn-add-role"><i class="ti ti-plus"></i>Add Role</x-buttons.button-primary>
+                    <x-buttons.button-primary data-bs-toggle="modal" data-bs-target="#modal-user" class="btn-add-user"><i class="ti ti-plus"></i>Add User</x-buttons.button-primary>
                 </div>
             </div>
         </div>
         <div class="table-responsive">
-            {!! $dataTable->table(['class' => 'table border table-striped table-bordered text-nowrap role-datatable w-100']) !!}
+            {!! $dataTable->table(['class' => 'table border table-striped table-bordered text-nowrap user-datatable w-100']) !!}
         </div>
     </x-cards.card>
 
-    <x-elements.modal id="modal-role" data-bs-backdrop="static" data-bs-keyboard="false">
+    <x-elements.modal id="modal-user" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-body">
-            <x-inputs.form class="form-role">
-                <div class="form-group">
-                    <x-inputs.input id="name" name="name" label="Role Name" required/>
+            <x-inputs.form class="form-user">
+                <div class="form-group mb-2">
+                    <x-inputs.input id="name" name="name" label="Name" required/>
+                </div>
+                <div class="form-group mb-2">
+                    <x-inputs.input type="email" id="email" name="email" label="Email" required/>
+                </div>
+                <div class="form-group mb-2">
+                    <x-inputs.select name="role" id="role" label="Role" required>
+                        <option value="">Select Role</option>
+                        @foreach($roles as $role)
+                            <option value="{{ $role->name }}">{{ $role->name }}</option>
+                        @endforeach
+                    </x-inputs.select>
+                </div>
+                <div class="form-group mb-2">
+                    <x-inputs.input type="password" id="password" name="password" label="Password" required/>
+                </div>
+                <div class="form-group mb-2">
+                    <x-inputs.input type="password" id="password-confirmation" name="password_confirmation" label="Password Confirmation" required/>
                 </div>
             </x-inputs.form>
         </div>
@@ -57,6 +74,6 @@
     @push('script')
         <script type="module" src="{{ asset('templates/mdrnz/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
         {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-        @vite('resources/js/page/role.js')
+        @vite('resources/js/page/user.js')
     @endpush
 </x-layouts.app>
