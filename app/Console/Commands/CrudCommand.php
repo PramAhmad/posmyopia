@@ -13,7 +13,7 @@ class CrudCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:crud {name}';
+    protected $signature = 'make:crud {name} {--table}';
 
     /**
      * The console command description.
