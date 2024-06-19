@@ -38,9 +38,7 @@
     <x-elements.modal id="modal-{{ name }}" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-body">
             <x-inputs.form class="form-{{ name }}">
-                <div class="form-group mb-2">
-                    <x-inputs.input id="name" name="name" label="Name" required/>
-                </div>
+                {{ fields }}
             </x-inputs.form>
         </div>
         <div class="modal-footer">

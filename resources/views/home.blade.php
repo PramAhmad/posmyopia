@@ -9,7 +9,7 @@
                                 <div class="rounded-circle overflow-hidden me-6">
                                     <img src="{{ asset('templates/mdrnz/images/profile/user-1.jpg') }}" alt="" width="40" height="40">
                                 </div>
-                                <h5 class="fw-semibold mb-0 fs-5">Welcome back Mathew Anderson!</h5>
+                                <h5 class="fw-semibold mb-0 fs-5">Welcome back {{ auth()->user()->name }}!</h5>
                             </div>
                             <div class="d-flex align-items-center">
                                 <div class="border-end pe-4 border-muted border-opacity-10">

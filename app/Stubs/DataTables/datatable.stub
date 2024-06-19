@@ -85,7 +85,7 @@ class {{ caps_name }}DataTable extends DataTable
                 'width' => '5%',
                 'class' => 'text-center',
             ],
-            Column::make('name'),
+            {{ columns }}
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
