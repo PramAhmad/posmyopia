@@ -2,10 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Menu;
+use App\Models\MenuPermission;
 use Binafy\LaravelStub\Facades\LaravelStub;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Pluralizer;
+use Spatie\Permission\Models\Permission;
 
 class CrudCommand extends Command
 {
@@ -30,20 +33,11 @@ class CrudCommand extends Command
      */
     public function handle()
     {
-        LaravelStub::from(app_path() . '/Stubs/Controllers/controller.stub')
-                    ->to(app_path(). '/Http/Controllers')
-                    ->name(ucwords(Pluralizer::singular($this->argument('name') . 'Controller')))
-                    ->ext('php')
-                    ->replaces([
-                        'name' => strtolower($this->argument('name')),
-                        'model' => Pluralizer::singular($this->argument('name')),
-                        'caps_name' => Pluralizer::singular($this->argument('name'))
-                    ])
-                    ->generate();
-
-        $this->generateView();
-        $this->generateModel();
-        $this->generateDatatables();
+        // $this->generateController();
+        // $this->generateView();
+        // $this->generateModel();
+        // $this->generateDatatables();
+        $this->generateMenu();
     }
 
     private function tableColumn()
@@ -178,5 +172,87 @@ class CrudCommand extends Command
 
         return rtrim($columns, '
         ');
+    }
+
+    /**
+     * GENERATE CONTROLLER
+     */
+    private function generateController()
+    {
+        LaravelStub::from(app_path() . '/Stubs/Controllers/controller.stub')
+                    ->to(app_path(). '/Http/Controllers')
+                    ->name($this->controllerName())
+                    ->ext('php')
+                    ->replaces([
+                        'name' => strtolower($this->argument('name')),
+                        'model' => Pluralizer::singular($this->argument('name')),
+                        'caps_name' => Pluralizer::singular($this->argument('name'))
+                    ])
+                    ->generate();
+    }
+
+    /**
+     * GENERATE MENU & PERMISSION
+     */
+    private function generateMenu()
+    {
+        // $insertMenu = [
+        //     'name' => ucwords(Pluralizer::singular($this->argument('name'))),
+        //     'route' => strtolower($this->argument('name')) . '.index',
+        //     'icon' => 'fas fa-user'
+        // ];
+
+        // $menu = Menu::create($insertMenu);
+
+        // $permissions = [
+        //     [
+        //         'name' => 'view ' . strtolower($this->argument('name')),
+        //         'guard_name' => 'web'
+        //     ],
+        //     [
+        //         'name' => 'create '. strtolower($this->argument('name')),
+        //         'guard_name' => 'web'
+        //     ],
+        //     [
+        //         'name' => 'edit '. strtolower($this->argument('name')),
+        //         'guard_name' => 'web'
+        //     ],
+        //     [
+        //         'name' => 'delete '. strtolower($this->argument('name')),
+        //         'guard_name' => 'web'
+        //     ],
+        // ];
+
+        // foreach($permissions as $p)
+        // {
+        //     $permission = Permission::create($p);
+        //     MenuPermission::create([
+        //         'menu_id' => $menu->id,
+        //         'permission_id' => $permission->id
+        //     ]);
+        // }
+
+        $routeFile = fopen(base_path() . '/routes/web.php', 'a');
+        fwrite($routeFile, PHP_EOL . PHP_EOL ."/** " . strtoupper($this->argument('name')) . " */
+Route::prefix('".strtolower($this->argument('name'))."')->group(function () {
+    Route::name('".strtolower($this->argument('name')).".')->group(function () {
+        Route::controller(".$this->controllerName()."::class)->group(function(){
+            Route::get('/', 'index')->name('index')->middleware('role_or_permission:superadmin|view ".strtolower($this->argument('name'))."');
+            Route::post('/', 'create')->name('create')->middleware('role_or_permission:superadmin|create ".strtolower($this->argument('name'))."');
+            Route::post('/{id}/edit', 'edit')->name('edit')->middleware('role_or_permission:superadmin|edit ".strtolower($this->argument('name'))."');
+            Route::put('/{id}/edit', 'update')->name('update')->middleware('role_or_permission:superadmin|edit ".strtolower($this->argument('name'))."');
+            Route::delete('/{id}/delete', 'destroy')->name('delete')->middleware('role_or_permission:superadmin|delete ".strtolower($this->argument('name'))."');
+        });
+    });
+});");
+
+        fclose($routeFile);
+
+        // dd($permission);
+    }
+
+    private function controllerName()
+    {
+        return ucwords(Pluralizer::singular($this->argument('name') . 'Controller'));
     }
 }

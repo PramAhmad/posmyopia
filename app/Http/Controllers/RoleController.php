@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\RoleDataTable;
+use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -68,6 +69,34 @@ class RoleController extends Controller
     public function permission($id)
     {
         $role = Role::findOrFail($id);
+        $menus = Menu::all();
+
+        $modules = [];
+
+        foreach ($menus as $menu) {
+            $menuPermission
+            $modules[] = [
+                'name' => $menu->name,
+                'permission' => [
+                    [
+                        'name' => 'view '. $menu->name,
+                        'checked' => $role->hasPermissionTo('view '. $menu->name)
+                    ],
+                    [
+                        'name' => 'create '. $menu->name,
+                        'checked' => $role->hasPermissionTo('create '. $menu->name)
+                    ],
+                    [
+                        'name' => 'edit '. $menu->name,
+                        'checked' => $role->hasPermissionTo('edit '. $menu->name)
+                    ],
+                    [
+                        'name' => 'delete '. $menu->name,
+                        'checked' => $role->hasPermissionTo('delete '. $menu->name)
+                    ]
+                ]
+            ];
+        }
 
         $modules = [
             [

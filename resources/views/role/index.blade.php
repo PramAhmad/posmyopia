@@ -52,7 +52,7 @@
     @push('css')
         <link rel="stylesheet" href="{{ asset('templates/mdrnz/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
         <link rel="stylesheet" href="{{ asset('templates/mdrnz/css/custom-datatables.css') }}">
-        <style>.dataTables_length,.dataTables_filter{display: none}</style>
+        <style>.dataTables_length,.dataTables_filter{display: none}.dataTable{font-size: .83rem}.table > :not(caption) > * > * { padding: 10px 10px;}</style>
     @endpush
     @push('script')
         <script type="module" src="{{ asset('templates/mdrnz/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>

@@ -60,6 +60,9 @@
             </x-inputs.form>
         </div>
     </x-cards.card>
+    @push('css')
+        <style>.table{font-size: .83rem}.table > :not(caption) > * > * { padding: 10px 10px;}</style>
+    @endpush
 
     @push('script')
         <script>
