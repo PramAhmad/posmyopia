@@ -94,13 +94,14 @@ class PermissionSeeder extends Seeder
                     $permission = Permission::create(
                         [
                             'name' => $p['name'],
-                            'guard_name' => $p['guard_name']?? 'web'
+                            'guard_name' => $p['guard_name'] ?? 'web'
                         ]
                     );
 
                     MenuPermission::create(
                         [
-                           'menu_id' => $menu->id,
+                            'alias' => explode(' ', $p['name'])[0],
+                            'menu_id' => $menu->id,
                             'permission_id' => $permission->id
                         ]
                     );

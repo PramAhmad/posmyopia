@@ -1,6 +1,6 @@
 <div class="center action-buttons">
     @if ($query->name !== 'superadmin')
-        <a href="{{ route('role.permission', $query->id) }}" title="Set Permission" class="btn btn-sm btn-outline-primary" data-id="{{ $query->id }}"><i class="ti ti-lock"></i> Set Permission</a>
+        <a href="{{ route('role.permission', $query->id) }}" title="Set Permission" class="btn btn-sm btn-outline-primary" data-id="{{ $query->id }}"><i class="ti ti-lock"></i> Set Access Menu & Permission</a>
     @endif
     <x-buttons.button-primary title="Edit" class="btn-sm btn-edit" data-id="{{ $query->id }}"><i class="ti ti-pencil"></i></x-buttons.button-primary>
     <x-buttons.button-danger title="Delete" class="btn-sm btn-delete"><i class="ti ti-trash"></i></x-buttons.button-danger>

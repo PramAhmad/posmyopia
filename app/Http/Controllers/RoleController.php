@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\DataTables\RoleDataTable;
 use App\Models\Menu;
+use App\Models\MenuPermission;
+use App\Models\RoleMenu;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -74,74 +77,25 @@ class RoleController extends Controller
         $modules = [];
 
         foreach ($menus as $menu) {
-            $menuPermission
+            $menuPermission = MenuPermission::where('menu_id', $menu->id)->get();
+            $permission = [];
+
+            foreach ($menuPermission as $mp) {
+                $permission[] = [
+                    'id' => $mp->id,
+                    'name' => $mp->alias,
+                    'permission_name' => $mp->permission?->name,
+                    'checked' => $role->hasPermissionTo($mp->permission?->name)
+                ];
+            }
+
             $modules[] = [
+                'id' => $menu->id,
                 'name' => $menu->name,
-                'permission' => [
-                    [
-                        'name' => 'view '. $menu->name,
-                        'checked' => $role->hasPermissionTo('view '. $menu->name)
-                    ],
-                    [
-                        'name' => 'create '. $menu->name,
-                        'checked' => $role->hasPermissionTo('create '. $menu->name)
-                    ],
-                    [
-                        'name' => 'edit '. $menu->name,
-                        'checked' => $role->hasPermissionTo('edit '. $menu->name)
-                    ],
-                    [
-                        'name' => 'delete '. $menu->name,
-                        'checked' => $role->hasPermissionTo('delete '. $menu->name)
-                    ]
-                ]
+                'permission' => $permission,
+                'checked' => RoleMenu::where(['role_id' => $id, 'menu_id' => $menu->id])->exists()
             ];
         }
-
-        $modules = [
-            [
-                'name' => 'Role',
-                'permission' => [
-                    [
-                        'name' => 'view role',
-                        'checked' => $role->hasPermissionTo('view role')
-                    ],
-                    [
-                        'name' => 'create role',
-                        'checked' => $role->hasPermissionTo('create role')
-                    ],
-                    [
-                        'name' => 'edit role',
-                        'checked' => $role->hasPermissionTo('edit role')
-                    ],
-                    [
-                        'name' => 'delete role',
-                        'checked' => $role->hasPermissionTo('delete role')
-                    ]
-                ]
-            ],
-            [
-                'name' => 'User',
-                'permission' => [
-                    [
-                        'name' => 'view user',
-                        'checked' => $role->hasPermissionTo('view user')
-                    ],
-                    [
-                        'name' => 'create user',
-                        'checked' => $role->hasPermissionTo('create user')
-                    ],
-                    [
-                        'name' => 'edit user',
-                        'checked' => $role->hasPermissionTo('edit user')
-                    ],
-                    [
-                        'name' => 'delete user',
-                        'checked' => $role->hasPermissionTo('delete user')
-                    ]
-                ]
-            ]
-        ];
 
         return view('role.permission', compact('role', 'modules'));
     }
@@ -154,8 +108,37 @@ class RoleController extends Controller
             return response()->json(['success' => false, 'message' => 'Role not found'], 404);
         }
 
-        $role->syncPermissions($request->permission);
+        DB::beginTransaction();
 
-        return redirect(route('role.permission', $id))->with('success', 'Permission updated successfully');
+        try {
+            $role->syncPermissions($request->permission);
+
+            $roleMenu = [];
+
+            if ($request->menu) {
+                foreach($request->menu as $m) {
+                    $roleMenu[] = [
+                        'role_id' => $id,
+                        'menu_id' => $m,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
+                }
+            }
+
+            RoleMenu::where('role_id', $id)->delete();
+
+            if (count($roleMenu) > 0){
+                RoleMenu::insert($roleMenu);
+            }
+            
+            DB::commit();
+
+            return redirect(route('role.permission', $id))->with('success', 'Permission updated successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect(route('role.permission', $id))->with('error', $e->getMessage());
+        }
     }
 }

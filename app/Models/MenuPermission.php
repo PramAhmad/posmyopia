@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Permission;
 
 class MenuPermission extends Model
 {
@@ -11,5 +12,11 @@ class MenuPermission extends Model
     protected $fillable = [
         'menu_id',
         'permission_id',
+        'alias'
     ];
+
+    public function permission()
+    {
+        return $this->belongsTo(Permission::class);
+    }
 }
