@@ -16,7 +16,24 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav scroll-sidebar" data-simplebar>
             <ul id="sidebarnav">
-                <!-- ============================= -->
+                @foreach ($roleMenus as $menu)
+                    @if (!$menu->route && !$menu->icon)
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">{{ $menu->name }}</span>
+                        </li>
+                    @else
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route($menu->route) }}" aria-expanded="false">
+                                <span>
+                                    <i class="{{ $menu->icon }}"></i>
+                                </span>
+                                <span class="hide-menu">{{ $menu->name }}</span>
+                            </a>
+                        </li>
+                    @endif
+                @endforeach
+                {{-- <!-- ============================= -->
                 <!-- Home -->
                 <!-- ============================= -->
                 <li class="nav-small-cap">
@@ -57,7 +74,7 @@
                         </span>
                         <span class="hide-menu">Users</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </nav>
         <div class="fixed-profile p-3 bg-light-secondary rounded sidebar-ad mt-3">

@@ -23,6 +23,17 @@ class UserDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
+            ->editColumn('name', function($query) {
+                return '<div class="d-flex align-items-center">
+                            <div class="me-2 pe-1">
+                                <img src="'. asset('templates/mdrnz/images/profile/user-1.jpg') .'" class="rounded-circle" width="40" height="40" alt="">
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold mb-1"> '. $query->name .' </h6>
+                                <p class="fs-2 mb-0 text-muted">'.$query->email.'</p>
+                            </div>
+                        </div>';
+            })
             ->addColumn('role', function($query) {
                 return '<div class="text-center"><span class="badge bg-success">' . $query->getRoleNames()[0] . '</span></div>';
             })
@@ -30,7 +41,7 @@ class UserDataTable extends DataTable
                 return view('datatable-actions.user', compact('query'));
             })
             ->setRowId('id')
-            ->rawColumns(['role']);
+            ->rawColumns(['role', 'name']);
     }
 
     /**
@@ -89,7 +100,6 @@ class UserDataTable extends DataTable
                 'class' => 'text-center',
             ],
             Column::make('name'),
-            Column::make('email'),
             Column::computed('role'),
             Column::computed('action')
                   ->exportable(false)

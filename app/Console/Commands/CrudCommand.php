@@ -33,10 +33,10 @@ class CrudCommand extends Command
      */
     public function handle()
     {
-        // $this->generateController();
-        // $this->generateView();
-        // $this->generateModel();
-        // $this->generateDatatables();
+        $this->generateController();
+        $this->generateView();
+        $this->generateModel();
+        $this->generateDatatables();
         $this->generateMenu();
     }
 
@@ -196,41 +196,41 @@ class CrudCommand extends Command
      */
     private function generateMenu()
     {
-        // $insertMenu = [
-        //     'name' => ucwords(Pluralizer::singular($this->argument('name'))),
-        //     'route' => strtolower($this->argument('name')) . '.index',
-        //     'icon' => 'fas fa-user'
-        // ];
+        $insertMenu = [
+            'name' => ucwords(Pluralizer::singular($this->argument('name'))),
+            'route' => strtolower($this->argument('name')) . '.index',
+            'icon' => 'fas fa-user'
+        ];
 
-        // $menu = Menu::create($insertMenu);
+        $menu = Menu::create($insertMenu);
 
-        // $permissions = [
-        //     [
-        //         'name' => 'view ' . strtolower($this->argument('name')),
-        //         'guard_name' => 'web'
-        //     ],
-        //     [
-        //         'name' => 'create '. strtolower($this->argument('name')),
-        //         'guard_name' => 'web'
-        //     ],
-        //     [
-        //         'name' => 'edit '. strtolower($this->argument('name')),
-        //         'guard_name' => 'web'
-        //     ],
-        //     [
-        //         'name' => 'delete '. strtolower($this->argument('name')),
-        //         'guard_name' => 'web'
-        //     ],
-        // ];
+        $permissions = [
+            [
+                'name' => 'view ' . strtolower($this->argument('name')),
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'create '. strtolower($this->argument('name')),
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'edit '. strtolower($this->argument('name')),
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'delete '. strtolower($this->argument('name')),
+                'guard_name' => 'web'
+            ],
+        ];
 
-        // foreach($permissions as $p)
-        // {
-        //     $permission = Permission::create($p);
-        //     MenuPermission::create([
-        //         'menu_id' => $menu->id,
-        //         'permission_id' => $permission->id
-        //     ]);
-        // }
+        foreach($permissions as $p)
+        {
+            $permission = Permission::create($p);
+            MenuPermission::create([
+                'menu_id' => $menu->id,
+                'permission_id' => $permission->id
+            ]);
+        }
 
         $routeFile = fopen(base_path() . '/routes/web.php', 'a');
         fwrite($routeFile, PHP_EOL . PHP_EOL ."/** " . strtoupper($this->argument('name')) . " */

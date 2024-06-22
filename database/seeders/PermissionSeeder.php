@@ -31,7 +31,7 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'Role',
                 'route' => 'role.index',
-                'icon' => 'ti ti-layout-dashboard',
+                'icon' => 'ti ti-lock-access',
                 'sequence' => '2.1',
                 'permissions' => [
                     [
@@ -55,7 +55,7 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'User',
                 'route' => 'user.index',
-                'icon' => 'ti ti-layout-dashboard',
+                'icon' => 'ti ti-users',
                 'sequence' => '2.1',
                 'permissions' => [
                     [

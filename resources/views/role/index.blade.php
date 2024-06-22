@@ -25,13 +25,16 @@
                         <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-10 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
-                    <x-buttons.button-primary data-bs-toggle="modal" data-bs-target="#modal-role" class="btn-add-role"><i class="ti ti-plus"></i>Add Role</x-buttons.button-primary>
-                </div>
+                
+                @if ((auth()->user()->hasRole('superadmin')) | (auth()->user()->hasPermissionTo('create role')))
+                    <div class="col-md-8 col-xl-10 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+                        <x-buttons.button-primary data-bs-toggle="modal" data-bs-target="#modal-role" class="btn-add-role"><i class="ti ti-plus"></i>Add Role</x-buttons.button-primary>
+                    </div>
+                @endif
             </div>
         </div>
         <div class="table-responsive">
-            {!! $dataTable->table(['class' => 'table border table-striped table-bordered text-nowrap role-datatable w-100']) !!}
+            {!! $dataTable->table(['class' => 'table align-middle text-nowrap role-datatable w-100']) !!}
         </div>
     </x-cards.card>
 

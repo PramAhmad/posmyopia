@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ThumbnailController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -54,18 +55,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-
-/** SETTING */
-Route::prefix('member')->group(function () {
-    Route::name('member.')->group(function () {
-        
-        /** ACCOUNT SETTING */
-        Route::controller(SettingController::class)->group(function(){
-            Route::get('/', 'index')->name('index')->middleware('role_or_permission:superadmin|view member');
-            Route::post('/', 'create')->name('create')->middleware('role_or_permission:superadmin|create member');
-            Route::post('/{id}/edit', 'edit')->name('edit')->middleware('role_or_permission:superadmin|edit member');
-            Route::put('/{id}/edit', 'update')->name('update')->middleware('role_or_permission:superadmin|edit member');
-            Route::delete('/{id}/delete', 'destroy')->name('delete')->middleware('role_or_permission:superadmin|delete member');
-        });
-    });
-});
