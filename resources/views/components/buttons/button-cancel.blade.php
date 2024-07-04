@@ -1,1 +1,1 @@
-<button {{ $attributes->merge(['class' => 'btn btn-light-danger text-danger']) }}>Cancel</button>
+<button {{ $attributes->merge(['class' => 'btn bg-danger-subtle text-danger']) }}>Cancel</button>

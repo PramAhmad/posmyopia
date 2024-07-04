@@ -95,8 +95,7 @@ $(".boxed-width").click(function () {
 });
 
 /*Dark/Light theme*/
-$(".light-logo").show();
-$(".dark-logo").hide();
+$(".light-logo").hide();
 $(".dark-theme").click(function () {
   $("nav.navbar-light").addClass("navbar-dark");
   $(".dark-theme i").addClass("text-primary");

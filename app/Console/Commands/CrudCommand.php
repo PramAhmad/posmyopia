@@ -95,10 +95,12 @@ class CrudCommand extends Command
                 continue;
             }
 
+            $fieldType = explode('(', $column->Type)[0];
+            $priceFormat = $fieldType == 'decimal' ? 'price' : null;
             $isRequired = $column->Null == 'NO' ? 'required' : '';
 
             $fields.= '<div class="form-group mb-2">
-                    <x-inputs.input id="'. $column->Field. '" name="'. $column->Field. '" label="'. ucwords(str_replace('_', ' ',$column->Field)). '" '. $isRequired .'/>
+                    <x-inputs.input id="'. $column->Field. '" name="'. $column->Field. '" class="'.$priceFormat.'" label="'. ucwords(str_replace('_', ' ',$column->Field)). '" '. $isRequired .'/>
                 </div>
                 ';
         }
@@ -222,11 +224,14 @@ class CrudCommand extends Command
                 'guard_name' => 'web'
             ],
         ];
+        
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         foreach($permissions as $p)
         {
             $permission = Permission::create($p);
             MenuPermission::create([
+                'alias' => explode(' ', $p['name'])[0],
                 'menu_id' => $menu->id,
                 'permission_id' => $permission->id
             ]);

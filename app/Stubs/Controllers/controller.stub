@@ -52,7 +52,7 @@ class {{ caps_name }}Controller extends Controller
 
         ${{ name }}->update($update);
 
-        return response()->json(['success' => true, 'message' => '{{ caps_namename }} update successfully', '_token' => csrf_token()]);
+        return response()->json(['success' => true, 'message' => '{{ caps_name }} update successfully', '_token' => csrf_token()]);
     }
 
     public function destroy($id)
@@ -65,6 +65,6 @@ class {{ caps_name }}Controller extends Controller
 
         ${{ name }}->delete();
 
-        return response()->json(['success' => true, 'message' => '{{caps_ name }} deleted successfully', '_token' => csrf_token()]);
+        return response()->json(['success' => true, 'message' => '{{ caps_name }} deleted successfully', '_token' => csrf_token()]);
     }
 }
