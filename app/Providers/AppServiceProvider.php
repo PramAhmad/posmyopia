@@ -32,12 +32,15 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function () {
             if (auth()->check()) {
-                $menus = Menu::all();
+                $menus = [];
 
                 if (!auth()->user()->hasRole('superadmin')) {
                     $menus = RoleMenu::join('menus', 'menus.id', 'role_menus.menu_id')
                                     ->where('role_id', auth()->user()->roles->first()->id)
+                                    ->orderBy('menus.sequence', 'asc')
                                     ->get();
+                } else {
+                    $menus = Menu::orderBy('sequence', 'asc')->get();
                 }
 
                 View::share('menus', $menus);
