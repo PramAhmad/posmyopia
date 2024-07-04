@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Menu;
 use App\Models\RoleMenu;
 use App\Models\User;
 use Illuminate\Support\ServiceProvider;
@@ -30,14 +31,16 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('*', function () {
-            if (auth()->check()){
-                $roleMenus = RoleMenu::join('menus', 'menus.id', 'role_menus.menu_id')
-                                        ->when(!auth()->user()->hasRole('superadmin'), function($q){
-                                            return $q->where('role_id', auth()->user()->roles->first()->id);
-                                        })
-                                        ->get();
+            if (auth()->check()) {
+                $menus = Menu::all();
 
-                View::share('roleMenus', $roleMenus);
+                if (!auth()->user()->hasRole('superadmin')) {
+                    $menus = RoleMenu::join('menus', 'menus.id', 'role_menus.menu_id')
+                                    ->where('role_id', auth()->user()->roles->first()->id)
+                                    ->get();
+                }
+
+                View::share('menus', $menus);
                 View::share('key', 'value');
             }
         });

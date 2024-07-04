@@ -13,7 +13,7 @@
 
         <nav class="sidebar-nav scroll-sidebar" data-simplebar>
             <ul id="sidebarnav">
-                @foreach ($roleMenus as $menu)
+                @foreach ($menus as $menu)
                     @if (!$menu->route && !$menu->icon)
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
