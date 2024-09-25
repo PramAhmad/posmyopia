@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ThumbnailController;
+use App\Http\Controllers\TokoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -55,3 +57,42 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+/** TOKO */
+Route::prefix('toko')->group(function () {
+    Route::name('toko.')->group(function () {
+        Route::controller(TokoController::class)->group(function(){
+            Route::get('/', 'index')->name('index')->middleware('role_or_permission:superadmin|view toko');
+            Route::post('/', 'create')->name('create')->middleware('role_or_permission:superadmin|create toko');
+            Route::post('/{id}/edit', 'edit')->name('edit')->middleware('role_or_permission:superadmin|edit toko');
+            Route::put('/{id}/edit', 'update')->name('update')->middleware('role_or_permission:superadmin|edit toko');
+            Route::delete('/{id}/delete', 'destroy')->name('delete')->middleware('role_or_permission:superadmin|delete toko');
+        });
+    });
+});
+
+/** CATEGORY */
+Route::prefix('category')->group(function () {
+    Route::name('category.')->group(function () {
+        Route::controller(CategoryController::class)->group(function(){
+            Route::get('/', 'index')->name('index')->middleware('role_or_permission:superadmin|view category');
+            Route::post('/', 'create')->name('create')->middleware('role_or_permission:superadmin|create category');
+            Route::post('/{id}/edit', 'edit')->name('edit')->middleware('role_or_permission:superadmin|edit category');
+            Route::put('/{id}/edit', 'update')->name('update')->middleware('role_or_permission:superadmin|edit category');
+            Route::delete('/{id}/delete', 'destroy')->name('delete')->middleware('role_or_permission:superadmin|delete category');
+        });
+    });
+});
+
+/** CATEGORY */
+Route::prefix('category')->group(function () {
+    Route::name('category.')->group(function () {
+        Route::controller(CategoryController::class)->group(function(){
+            Route::get('/', 'index')->name('index')->middleware('role_or_permission:superadmin|view category');
+            Route::post('/', 'create')->name('create')->middleware('role_or_permission:superadmin|create category');
+            Route::post('/{id}/edit', 'edit')->name('edit')->middleware('role_or_permission:superadmin|edit category');
+            Route::put('/{id}/edit', 'update')->name('update')->middleware('role_or_permission:superadmin|edit category');
+            Route::delete('/{id}/delete', 'destroy')->name('delete')->middleware('role_or_permission:superadmin|delete category');
+        });
+    });
+});
