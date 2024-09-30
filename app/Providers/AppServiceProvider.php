@@ -36,9 +36,10 @@ class AppServiceProvider extends ServiceProvider
 
                 if (!auth()->user()->hasRole('superadmin')) {
                     $menus = RoleMenu::join('menus', 'menus.id', 'role_menus.menu_id')
-                                    ->where('role_id', auth()->user()->roles->first()->id)
-                                    ->orderBy('menus.sequence', 'asc')
-                                    ->get();
+                    ->where('role_id', auth()->user()->roles->first()->id)
+                    ->orderBy('menus.sequence', 'asc')
+                    ->get();
+
                 } else {
                     $menus = Menu::orderBy('sequence', 'asc')->get();
                 }

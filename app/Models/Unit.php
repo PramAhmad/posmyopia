@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Unit extends Model
 {
-    protected $table = 'category';
     use HasFactory;
-    protected $fillable = ['toko_id', 'name', 'slug'];
+    protected $fillable = ['toko_id', 'name', 'slug', 'short_code'];
 
     public function toko()
     {

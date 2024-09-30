@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class CategoryDataTable extends DataTable
+class ProductDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -24,25 +24,30 @@ class CategoryDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function($query) {
-                return view('datatable-actions.category', compact('query'));
+                return view('datatable-actions.product', compact('query'));
             })
             ->editColumn('toko_id', function($query) {
                 return $query->toko->nama_toko;
             })
+            ->editColumn('category_id', function($query) {
+                return $query->category->name;
+            })
+            ->editColumn('unit_id', function($query) {
+                return $query->unit->name;
+            })
+            ->editColumn('image', function($query) {
+                return '<img src="'.asset('/images/'.$query->image).'" class="img-thumbnail" width="50" height="50">';
+            })
             ->setRowId('id')
-            ->rawColumns(['role']);
+       
+            ->rawColumns(['role','image']);
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Category $model): QueryBuilder
+    public function query(Product $model): QueryBuilder
     {
-        if(auth()->user()->hasRole('superadmin')){
-            $model->newQuery();
-        }else{
-            $model = Category::where('toko_id', auth()->user()->toko_id);
-        };
         return $model->newQuery();
     }
 
@@ -52,7 +57,7 @@ class CategoryDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('category-table')
+                    ->setTableId('product-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -93,9 +98,14 @@ class CategoryDataTable extends DataTable
                 'width' => '5%',
                 'class' => 'text-center',
             ],
+            Column::make('image'),
             $this->getTokoIdColumn(),
+            Column::make('category_id'),
+            Column::make('unit_id'),
             Column::make('name'),
-            Column::make('slug'),
+            Column::make('code'),
+            Column::make('quantity'),
+            Column::make('quantity_alert'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
@@ -109,14 +119,14 @@ class CategoryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Category_' . date('YmdHis');
+        return 'Product_' . date('YmdHis');
     }
     protected function getTokoIdColumn()
     {
-       if(auth()->user()->hasRole('superadmin')){
+        if (auth()->user()->hasRole('superadmin')) {
             return Column::make('toko_id');
-        }else{
-            return Column::make('toko_id')->visible(false);
         }
+
+        return Column::make('toko_id')->visible(false);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Category;
+use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class CategoryDataTable extends DataTable
+class SupplierDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -24,25 +24,23 @@ class CategoryDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function($query) {
-                return view('datatable-actions.category', compact('query'));
+                return view('datatable-actions.supplier', compact('query'));
             })
-            ->editColumn('toko_id', function($query) {
+            ->editColumn('photo', function ($query) {
+                return '<img src="'.asset('upload/supplier/'.$query->photo).'" class="img-thumbnail" width="50" height="50">';
+            })
+            ->editColumn('toko_id', function ($query) {
                 return $query->toko->nama_toko;
             })
             ->setRowId('id')
-            ->rawColumns(['role']);
+            ->rawColumns(['role','photo']);
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Category $model): QueryBuilder
+    public function query(Supplier $model): QueryBuilder
     {
-        if(auth()->user()->hasRole('superadmin')){
-            $model->newQuery();
-        }else{
-            $model = Category::where('toko_id', auth()->user()->toko_id);
-        };
         return $model->newQuery();
     }
 
@@ -52,7 +50,7 @@ class CategoryDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('category-table')
+                    ->setTableId('supplier-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -93,9 +91,13 @@ class CategoryDataTable extends DataTable
                 'width' => '5%',
                 'class' => 'text-center',
             ],
-            $this->getTokoIdColumn(),
-            Column::make('name'),
-            Column::make('slug'),
+            Column::make('photo'),
+            Column::make('toko_id')->title('Toko'),
+            Column::make('name')->title('nama supplier'),
+            Column::make('phone'),
+            Column::make('email'),
+            Column::make('shop_name'),
+         
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
@@ -109,14 +111,6 @@ class CategoryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Category_' . date('YmdHis');
-    }
-    protected function getTokoIdColumn()
-    {
-       if(auth()->user()->hasRole('superadmin')){
-            return Column::make('toko_id');
-        }else{
-            return Column::make('toko_id')->visible(false);
-        }
+        return 'Supplier_' . date('YmdHis');
     }
 }

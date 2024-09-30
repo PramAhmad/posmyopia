@@ -48,12 +48,22 @@
                     <x-inputs.input type="email" id="email" name="email" label="Email" required/>
                 </div>
                 <div class="form-group mb-2">
-                    <x-inputs.select name="role" id="role" label="Role" required>
-                        <option value="">Select Role</option>
-                        @foreach($roles as $role)
-                            <option value="{{ $role->name }}">{{ $role->name }}</option>
-                        @endforeach
-                    </x-inputs.select>
+                <x-inputs.select
+                            id="tole"
+                            name="role"
+                            label="Nama Toko"
+                            :options="$roles"
+                            displayField="name"
+                            required />
+                </div>
+                <div class="form-group mb-2">
+                <x-inputs.select
+                            id="toko_id"
+                            name="toko_id"
+                            label="Nama Toko"
+                            :options="$toko"
+                            displayField="nama_toko"
+                            required />
                 </div>
                 <div class="form-group mb-2">
                     <x-inputs.input type="password" id="password" name="password" label="Password" required/>

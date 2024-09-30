@@ -22,6 +22,7 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3|max:100|unique:roles,name'
+       
         ]);
 
         Role::create($request->all());
@@ -78,17 +79,18 @@ class RoleController extends Controller
 
         foreach ($menus as $menu) {
             $menuPermission = MenuPermission::where('menu_id', $menu->id)->get();
+
             $permission = [];
 
             foreach ($menuPermission as $mp) {
                 $permission[] = [
                     'id' => $mp->id,
                     'name' => $mp->alias,
-                    'permission_name' => $mp->permission?->name,
-                    'checked' => $role->hasPermissionTo($mp->permission?->name)
+                    'permission_name' => $mp->permission?->name ?? 'N/A', 
+                    'checked' => $mp->permission?->name ? $role->hasPermissionTo($mp->permission->name) : false, 
                 ];
             }
-
+            
             $modules[] = [
                 'id' => $menu->id,
                 'name' => $menu->name,
@@ -96,14 +98,12 @@ class RoleController extends Controller
                 'checked' => RoleMenu::where(['role_id' => $id, 'menu_id' => $menu->id])->exists()
             ];
         }
-
         return view('role.permission', compact('role', 'modules'));
     }
 
     public function updatePermission(Request $request, $id)
     {
         $role = Role::find($id);
-
         if (!$role) {
             return response()->json(['success' => false, 'message' => 'Role not found'], 404);
         }

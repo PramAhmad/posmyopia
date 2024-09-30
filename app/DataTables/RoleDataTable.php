@@ -35,6 +35,12 @@ class RoleDataTable extends DataTable
      */
     public function query(ModelsRole $model): QueryBuilder
     {
+        if(auth()->user()->hasRole('superadmin')){
+            $model->newQuery();
+        }else{
+
+        $model = ModelsRole::where('name', '!=', 'superadmin');
+        };
         return $model->newQuery();
     }
 

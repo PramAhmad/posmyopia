@@ -11,7 +11,14 @@ class TokoController extends Controller
 {
     public function index(TokoDataTable $datatable)
     {
-        return $datatable->render('toko.index');
+        if(auth()->user()->hasRole('superadmin')){
+            $toko = Toko::all();
+            return $datatable->render('toko.index');
+        }else{
+            $toko = Toko::where('id', auth()->user()->toko_id)->first();
+    
+            return view('pos.toko.index',compact('toko'));
+        }
     }
 
     public function create(Request $request)
@@ -43,23 +50,21 @@ class TokoController extends Controller
 
         ]);
 
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('upload/toko'), $filename);  
 
-        }
         
-        $request->except('logo');   
-        
+                $file = $request->file('logo');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('upload/toko'), $filename);       
+            
+
+
         Toko::create([
-            'logo' => $filename,
+            'logo' => $filename, 
             'nama_toko' => $request->nama_toko,
             'domisili' => $request->domisili,
             'alamat_usaha' => $request->alamat_usaha,
             'nohp' => $request->nohp
         ]);
-
         return response()->json(['success' => true, 'message' => 'Toko created successfully', '_token' => csrf_token()]);
     }
 
@@ -101,7 +106,7 @@ class TokoController extends Controller
             'nohp.max' => 'No. HP maksimal 16 karakter'
 
         ]);
-    //   upload image
+
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $filename = time() . '.' . $file->getClientOriginalExtension();

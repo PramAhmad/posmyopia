@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Category;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class CategoryDataTable extends DataTable
+class UnitDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -24,7 +24,7 @@ class CategoryDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function($query) {
-                return view('datatable-actions.category', compact('query'));
+                return view('datatable-actions.unit', compact('query'));
             })
             ->editColumn('toko_id', function($query) {
                 return $query->toko->nama_toko;
@@ -36,13 +36,14 @@ class CategoryDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
-    public function query(Category $model): QueryBuilder
+    public function query(Unit $model): QueryBuilder
     {
         if(auth()->user()->hasRole('superadmin')){
             $model->newQuery();
         }else{
-            $model = Category::where('toko_id', auth()->user()->toko_id);
+            $model = Unit::where('toko_id', auth()->user()->toko_id);
         };
+
         return $model->newQuery();
     }
 
@@ -52,7 +53,7 @@ class CategoryDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('category-table')
+                    ->setTableId('unit-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -93,15 +94,19 @@ class CategoryDataTable extends DataTable
                 'width' => '5%',
                 'class' => 'text-center',
             ],
-            $this->getTokoIdColumn(),
+         
             Column::make('name'),
             Column::make('slug'),
+            Column::make('short_code'),
+            $this->getTokoIdColumn(),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
                   ->width(60)
                   ->addClass('text-center'),
+                  
         ];
+      
     }
 
     /**
@@ -109,11 +114,11 @@ class CategoryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Category_' . date('YmdHis');
+        return 'Unit_' . date('YmdHis');
     }
     protected function getTokoIdColumn()
     {
-       if(auth()->user()->hasRole('superadmin')){
+        if(auth()->user()->hasRole('superadmin')){
             return Column::make('toko_id');
         }else{
             return Column::make('toko_id')->visible(false);
